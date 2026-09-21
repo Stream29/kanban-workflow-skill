@@ -29,6 +29,7 @@ kanban/
 
 - Each task is a Markdown file named `YYYY-MM-DD-title.md`, with a stable filename unique across phases.
 - Express `Task Tree` as Kotlin script pseudocode in nested Markdown lists, with top-level logic and descriptive backtick-quoted action names.
+- Follow `programmatic-planning` for detailed execution tracking, control flow, concurrency, and subtasks.
 
 ```markdown
 # Task Tree
@@ -41,13 +42,3 @@ kanban/
 
 Task context, state needed to resume, inline checks, and subtask links.
 ```
-
-## Execution
-
-- Bold the current executing or suspended statement in each active invocation or coroutine; concurrent branches may have multiple bold positions.
-- Use `kotlinx.coroutines` primitives for structured-concurrency semantics.
-- A task completes when its script finishes successfully and its scoped child coroutines have finished.
-
-## Subtask Calls
-
-- Keep each subtask in a standalone task document; express it as a function call and link the call name to its document in `Details`.
