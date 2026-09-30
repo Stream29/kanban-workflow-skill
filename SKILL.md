@@ -1,6 +1,6 @@
 ---
 name: kanban-workflow
-description: Use when tracking work in project task records or kanban boards.
+description: Use with multi-step work.
 ---
 
 # Kanban Workflow
