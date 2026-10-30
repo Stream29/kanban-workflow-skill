@@ -26,7 +26,6 @@ kanban/
 └── done/
 ```
 
-- Follow [`programmatic-planning`](../programmatic-planning/SKILL.md#subtasks) for subtasks.
 - Record the user's initial intent for a task as discussion.
 - If the user confirms the task, move it to `planning/` and go to fill the details with the user, updating the task and plan according to the user's intent, record the user's decisions.
 - If a task is fully planned with no blocking prerequisites, move it to `executable/`.
@@ -37,17 +36,28 @@ kanban/
 ## Task Documents
 
 - Each task is a Markdown file named `YYYY-MM-DD-title.md`, with a stable filename unique across phases.
-- Express `Task Script` as Kotlin script pseudocode in nested Markdown lists, with top-level logic and descriptive backtick-quoted action names.
-- Follow `programmatic-planning` for detailed execution tracking, control flow, and concurrency.
+- Follow [`programmatic-planning`](../programmatic-planning/SKILL.md) for task scripts, subtasks, and execution tracking.
 
-```markdown
+````markdown
 # Task Script
 
-- `Review task requirements and relevant code`()
-- **`Implement the requested behavior`()**
-- `Run validation checks for the change`()
-
-# Details
-
-Task context, state needed to resume, inline checks, and subtask links.
+```kotlin
+try {
+    for (module in modules) {
+        if (module.requiresTests) {
+            `Compile and test module`(module)
+        }
+    }
+} catch (e: CompileOrTestFailed) {
+    val response = `Report failure and wait for a decision`(e)
+    `Replan based on the decision`(response)
+} finally {
+    `Clean up task resources`()
+}
 ```
+
+# Task State
+
+Task context, state needed to resume, pending user colaboration documents, and recorded memory.
+````
+
