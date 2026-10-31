@@ -28,7 +28,7 @@ kanban/
 
 - Record the user's initial intent for a task as discussion.
 - If the user confirms the task, move it to `planning/` and go to fill the details with the user, updating the task and plan according to the user's intent, record the user's decisions.
-- If a task is fully planned with no blocking prerequisites, move it to `executable/`.
+- If a task is fully planned and clearly has no blockers, move it to `executable/`, even if other tasks it depends on are unfinished.
 - To execute a task, move it to `active/` and protect it with `flock`. Parent agent should wait for its subtask `flock`s' completion except for explicitly asked not.
 - If a task is requiring some resources, create a subtask to present the resource and also protect it with `flock`.
 - A fully completed task should be moved to `done/`.
