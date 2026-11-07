@@ -49,16 +49,19 @@ fun runTaskLifecycle(task: Task) {
 
     // Eligible for Executable even if tasks in [task.dependencies] are unfinished.
     task.moveTo(Phase.Executable)
+    runExecutableTask(task)
+}
+
+/** Entry point for both top-level execution and subagents picking up a prepared subtask. */
+fun runExecutableTask(task: Task) {
     `Wait until all`(task.dependencies).`reach`(Phase.Done)
 
     task.moveTo(Phase.Active)
+    // Wrap the command or a single lifetime holder; do not spawn repeated sleep locks per step.
     task.withFlock {
-        // Child [task.subtasks] (including resource & subagent tasks) hold their own flocks.
-        `Execute task.script and wait for child task.subtasks flocks unless asked not to`(task)
+        // Child [task.subtasks] (including resource & subagent tasks) runExecutableTask and hold their own flocks.
+        `Execute task.script and wait for child task.subtasks unless asked not to`(task)
     }
     task.moveTo(Phase.Done)
 }
 ```
-
-
-
