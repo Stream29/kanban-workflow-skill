@@ -8,7 +8,7 @@ description: Use with multi-step work.
 Reuse existing project task locations, or create `/tmp/kanban-<topic>` when absent.
 
 ```kotlin
-@file:Import("../programmatic-planning/SKILL.md")
+@file:Import("../agent-script/SKILL.md")
 
 enum class Phase(val dir: String) {
     Discussion("kanban/discussion/"),
@@ -26,7 +26,7 @@ enum class Phase(val dir: String) {
 data class Task(
     val fileName: String, // YYYY-MM-DD-title.md
     var phase: Phase,
-    val script: TaskScript, // # Task Script (fenced kotlin block)
+    val script: TaskScript, // # Task Script (fenced kotlin block written in AgentScript)
     val state: TaskState,   // # Task State (context, resume state, collaboration docs, memory)
     val parent: Task? = null,
     val subtasks: List<Task> = emptyList(),
@@ -60,6 +60,7 @@ fun runExecutableTask(task: Task) {
     // Wrap the command or a single lifetime holder; do not spawn repeated sleep locks per step.
     task.withFlock {
         // Child [task.subtasks] (including resource & subagent tasks) runExecutableTask and hold their own flocks.
+        // Advance /*PC*/ as each step finishes.
         `Execute task.script and wait for child task.subtasks unless asked not to`(task)
     }
     task.moveTo(Phase.Done)
